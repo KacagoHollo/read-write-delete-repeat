@@ -24,7 +24,9 @@ function App() {
     setAddTask([...addTask])
   };
 
-  const deleteTask = (id) => {
+  const deleteTask = async(id) => {
+    const responseDel = await axios.delete(`http://localhost:6789/tasks/${id}`);
+    return responseDel;
   };
 
   return (
@@ -36,20 +38,27 @@ function App() {
           <button onClick={createTask}>add task</button>
         </div>
         <div id="list">
-          <button onClick={() => deleteTask(1)}>delete</button>
           <li style={{ display: 'inline' }}>
                 buy milk
           </li>
           <br></br>
         </div>
-        {manageTask.map((task, id) => (
-          <div key={id}>
-            <ul>
-              <li>{task.title}</li>
-            </ul>
-          </div>
-        ))
+        <ul>
+        {
+        manageTask ?
+        manageTask.map((task) => (
+        <div key={task.id}>
+          <li>{task.title}</li>
+          <button onClick={async() => {
+            await deleteTask(task.id);
+            const data = await getData();
+            setManageTask(data)
+            }
+          }>delete</button>
+        </div>)) : <p>Loading tasks</p>
+        
         }
+      </ul>
     </>
   );
 }
