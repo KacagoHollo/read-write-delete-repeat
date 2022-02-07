@@ -1,3 +1,9 @@
 {
-  "tasks": []
+  "tasks": [
+    {
+      "id": 1,
+      "title": "Világ megváltása!",
+      "isCompleted": false
+    }
+  ]
 }

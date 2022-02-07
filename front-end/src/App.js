@@ -9,19 +9,32 @@ function App() {
   const [manageTask, setManageTask] = useState([]);
   const [addTask, setAddTask] = useState("");
 
-  const getData = async () => {
-    const response = await axios.get('http://localhost:6789/tasks/');
-    setManageTask(response.data)
-   
+  const getData = async() => {
+    const response = await fetch('http://localhost:6789/tasks/');
+    const data = await response.json()
+    return data;
   }
   // console.log(getData());
   useEffect(() => {
-    getData();
-  }, []);
+    const init = async() => {
+      const data = await getData();
+    setManageTask(data);
+  }
+  init();
   console.log(manageTask);
+  }, []);
   
-  const createTask = () => {
-    setAddTask([...addTask])
+  const createTask = async(title) => {
+    const responseCre = await fetch(`http://localhost:6789/tasks/`,
+    {method: "POST",
+    headers: {
+      'Accept': 'application/json, text/plain, /',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({title:title})
+    }
+    );
+    return responseCre;
   };
 
   const deleteTask = async(id) => {
@@ -34,8 +47,13 @@ function App() {
         <h1>ToDo List</h1>
         <div id="menu">
           <label>Your new to-do</label>
-          <input type="text" placeholder="enter new task"/>
-          <button onClick={createTask}>add task</button>
+          <input type="text" placeholder="enter new task" value={addTask} onChange={(e) => setAddTask(e.target.value)}/>
+          <button disabled={addTask === ""} onClick={async() => {
+            await createTask(addTask);
+            const data = await getData();
+            setAddTask("");
+            setManageTask(data);
+          }}>add task</button>
         </div>
         <div id="list">
           <li style={{ display: 'inline' }}>
