@@ -57,7 +57,7 @@ function App() {
         </div>
         <div id="list">
           <li style={{ display: 'inline' }}>
-                buy milk
+            E.g.: buy milk
           </li>
           <br></br>
         </div>
